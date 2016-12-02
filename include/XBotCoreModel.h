@@ -45,7 +45,7 @@ private:
     std::string urdf_string, srdf_string;
     std::string srdf_path;
     std::string joint_map_config_path;
-    boost::shared_ptr<urdf::ModelInterface> urdf_model;
+    std::shared_ptr<urdf::ModelInterface> urdf_model;
     KDL::Tree robot_tree;
     
         
@@ -118,9 +118,9 @@ private:
      * @brief load the URDF filename
      * 
      * @param filename the URDF filename
-     * @return boost::shared_ptr< urdf::ModelInterface > the URDF model interface
+     * @return std::shared_ptr< urdf::ModelInterface > the URDF model interface
      */
-    boost::shared_ptr<urdf::ModelInterface> loadURDF(const std::string& filename);
+    std::shared_ptr<urdf::ModelInterface> loadURDF(const std::string& filename);
     
     
     /**
@@ -157,7 +157,7 @@ public:
      * 
      * @return std::shared_ptr< urdf::ModelInterface > the URDF ModelInterface
      */
-    boost::shared_ptr<urdf::ModelInterface const> get_urdf_model(void) const
+    std::shared_ptr<urdf::ModelInterface const> get_urdf_model(void) const
     {
         return urdf_model; 
     }

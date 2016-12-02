@@ -9,7 +9,7 @@
      #define DPRINTF printf
 #endif
 
-boost::shared_ptr<urdf::ModelInterface> XBot::XBotCoreModel::loadURDF(const std::string& filename)
+std::shared_ptr<urdf::ModelInterface> XBot::XBotCoreModel::loadURDF(const std::string& filename)
 {
 
     // get the entire file
@@ -30,7 +30,7 @@ boost::shared_ptr<urdf::ModelInterface> XBot::XBotCoreModel::loadURDF(const std:
     else
     {
         throw std::runtime_error("Could not open file " + filename + " for parsing.");
-        return boost::shared_ptr<urdf::ModelInterface>();
+        return std::shared_ptr<urdf::ModelInterface>();
     }
 }
 
