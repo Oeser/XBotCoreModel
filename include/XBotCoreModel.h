@@ -14,7 +14,7 @@
 #ifndef __X_BOT_CORE_MODEL_HPP__
 #define __X_BOT_CORE_MODEL_HPP__
 
-#include <IXBotModel.h>
+#include <XBotCore-interfaces/IXBotModel.h>
 
 #include <srdfdom_advr/model.h>
 #include <urdf_parser/urdf_parser.h>
