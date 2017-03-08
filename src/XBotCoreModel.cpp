@@ -101,8 +101,8 @@ bool XBot::XBotCoreModel::parseSRDF() {
             }
             // IMU
             if(actual_groups[i].name_ == "imu_sensors") {
-                for(int j = 0; j < actual_groups[i].joints_.size(); j++) {
-                    imu_sensors[actual_groups[i].joints_[j]] = -1; // TBD meaningful IDs? -1 means no ecat slave? 
+                for(int j = 0; j < actual_groups[i].links_.size(); j++) {
+                    imu_sensors[actual_groups[i].links_[j]] = -1; // TBD meaningful IDs? -1 means no ecat slave?
                 }
             }
             // LEGS
