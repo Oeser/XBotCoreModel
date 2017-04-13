@@ -398,6 +398,7 @@ bool XBot::XBotCoreModel::check_joint_limits() const
         if(joint.type == urdf::Joint::REVOLUTE || joint.type == urdf::Joint::PRISMATIC){
             if(joint.limits->upper <= joint.limits->lower){
                 std::cerr << "ERROR in " << __func__ << "! All revolute and prismatic joints must have their joint limits specified inside the URDF, with upper limit > lower limit." << std::endl;
+                std::cerr << "Joint " << joint.name << "has QMAX = " << joint.limits->upper << ", QMIN = " << joint.limits->lower << std::endl;
                 return false;
             }
         }
