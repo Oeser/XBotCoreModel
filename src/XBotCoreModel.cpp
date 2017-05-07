@@ -124,7 +124,7 @@ bool XBot::XBotCoreModel::parseSRDF() {
                     arms_names.push_back(actual_groups[i].subgroups_[j]);
                 }
             }
-        // TBD IMU
+
         }
 
     }
@@ -232,6 +232,10 @@ bool XBot::XBotCoreModel::init(const std::string& urdf_filename,
                                const std::string& srdf_filename,
                                const std::string& joint_map_config)
 {
+    // print info about URDF and SRDF files
+    std::cout << "Using urdf_filename : " << urdf_filename << std::endl;
+    std::cout << "Using srdf_filename : " << srdf_filename << std::endl;
+    
     // SRDF path
     srdf_path = srdf_filename;
 
