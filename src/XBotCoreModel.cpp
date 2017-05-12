@@ -109,7 +109,7 @@ bool XBot::XBotCoreModel::parseSRDF() {
                     }
 
                     int ecat_id = joint2Rid(imu_link->parent_joint->name);
-                    imu_sensors[actual_groups[i].links_[j]] = ecat_id > 0 ? ecat_id : -1*(imu_sensors.size() + 1); // TBD meaningful IDs? -1 means no ecat slave?
+                    imu_sensors[actual_groups[i].links_[j]] = ecat_id > 0 ? ecat_id : -1*(imu_sensors.size()); // TBD meaningful IDs? -1 means no ecat slave?
                 }
             }
             // LEGS
