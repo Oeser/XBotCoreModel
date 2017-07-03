@@ -62,16 +62,22 @@ private:
     std::map<std::string, std::vector<std::string>> robot_string;
     
      /**
-     * @brief map between the chain name and the id of the ft_sensors
+     * @brief map between the ft name and the id of the ft_sensors
      * 
      */
     std::map<std::string, int> ft_sensors;
     
     /**
-     * @brief map between the chain name and the id of the imu_sensors
+     * @brief map between the imu name and the id of the imu_sensors
      * 
      */
     std::map<std::string, int> imu_sensors;
+    
+    /**
+     * @brief map between the hand name and the id of the imu_sensors
+     * 
+     */
+    std::map<std::string, int> hands;
     
     /**
      * @brief map between joint robot id and joint name
@@ -112,9 +118,6 @@ private:
     
     // map for the disabled joints in chains
     std::map<std::string, std::vector<std::string>> disabled_joints_in_chains;
-
-    
-    // TBD IMU
 
     
     
@@ -237,6 +240,11 @@ public:
     virtual std::map<std::string, int> get_imu_sensors() final
     {
         return imu_sensors;
+    }
+    
+    virtual std::map<std::string, int> get_hands() final
+    {
+        return hands;
     }
           
     virtual std::string rid2Joint(int rId) final

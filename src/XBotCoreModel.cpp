@@ -112,6 +112,12 @@ bool XBot::XBotCoreModel::parseSRDF() {
                     imu_sensors[actual_groups[i].links_[j]] = ecat_id > 0 ? ecat_id : -1*(imu_sensors.size()); // TBD meaningful IDs? -1 means no ecat slave?
                 }
             }
+            // HANDS
+            if(actual_groups[i].name_ == "hands") {
+                for(int j = 0; j < actual_groups[i].joints_.size(); j++) {
+                    hands[actual_groups[i].joints_[j]] = joint2Rid(actual_groups[i].joints_[j]);
+                }
+            }
             // LEGS
             else if(actual_groups[i].name_ == "legs") {
                 for(int j = 0; j < actual_groups[i].subgroups_.size(); j++) {
