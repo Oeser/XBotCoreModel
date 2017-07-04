@@ -43,11 +43,8 @@ bool XBot::XBotCoreModel::parseSRDF() {
 
     srdf_advr::Model::Group chains_group;
 
-    // find controlled_joints group and chains group
+    // find chains group
     for(int i = 0; i < group_num; i++) {
-        if( actual_groups[i].name_ == "controlled_joints"){
-            controlled_joints = actual_groups[i].joints_;
-        }
         if( actual_groups[i].name_ == "chains"){
             chains_group = actual_groups[i];
         }
@@ -142,9 +139,7 @@ bool XBot::XBotCoreModel::get_joints_in_chain(  std::string base_link,
                                                 std::vector<std::string>& enabled_joints_in_chain,
                                                 std::vector<std::string>& disabled_joints_in_chain)
 {
-
-//     getGroups().at("controlled_joints")->joints_
-
+    
     KDL::Chain actual_chain;
     if( robot_tree.getChain(base_link, tip_link, actual_chain) ) {
         int segments_num = actual_chain.getNrOfSegments();
@@ -153,23 +148,16 @@ bool XBot::XBotCoreModel::get_joints_in_chain(  std::string base_link,
             KDL::Joint actual_joint = actual_segment.getJoint();
 
             // Check if the joint is to be included in the chain, i.e. it is either a revolute,
-            // prismatic, or fixed joint belonging to the controlled_joints group
+            // prismatic
 
             bool is_valid_joint = false;
 
             // Check if joint is revolute or prismatic
             is_valid_joint = actual_joint.getTypeName() == "RotAxis"   ||
-                 actual_joint.getTypeName() == "TransAxis";
-
-            // Check if joint belongs to controlled_joints group
-            is_valid_joint = is_valid_joint || ( std::find(controlled_joints.begin(),
-                                                         controlled_joints.end(),
-                                                         actual_joint.getName()) != controlled_joints.end() );
-
+                             actual_joint.getTypeName() == "TransAxis";
 
             // if the joint is revolute or prismatic
-            if ( is_valid_joint /* ||  // TBD check this if needed
-                 actual_joint.getName() == "l_handj" || actual_joint.getName() == "r_handj"*/) {   // TBD check the model for the hands
+            if ( is_valid_joint) { 
 
                 // if the joint is enabled
                 if( !(std::find(disabled_joint_names.begin(), disabled_joint_names.end(), actual_joint.getName()) != disabled_joint_names.end() ) ) {
