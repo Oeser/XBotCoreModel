@@ -1,5 +1,9 @@
 #include <XBotCoreModel.h>
 #include <stdio.h>
+#include <iostream>
+#include <cstdio>
+#include <sys/stat.h> 
+#include <fcntl.h>
 
 #ifdef __XENO__
      #include <rtdk.h>
@@ -9,9 +13,30 @@
      #define DPRINTF printf
 #endif
 
+
+int suppress_stdout() {
+  fflush(stdout);
+
+  int ret = dup(1);
+  int nullfd = open("/dev/null", O_WRONLY);
+  // check nullfd for error omitted
+  dup2(nullfd, 1);
+  close(nullfd);
+
+  return ret;
+}
+
+void resume_stdout(int fd) {
+  fflush(stdout);
+  dup2(fd, 1);
+  close(fd);
+}
+
 boost::shared_ptr<urdf::ModelInterface> XBot::XBotCoreModel::loadURDF(const std::string& filename)
 {
 
+    
+    
     // get the entire file
     std::string xml_string;
     std::fstream xml_file(filename.c_str(), std::fstream::in);
@@ -24,8 +49,13 @@ boost::shared_ptr<urdf::ModelInterface> XBot::XBotCoreModel::loadURDF(const std:
         xml_string += (line + "\n");
         }
         xml_file.close();
+        
 
-        return urdf::parseURDF(xml_string);
+
+        auto urdf = urdf::parseURDF(xml_string);
+
+        
+        return urdf;
     }
     else
     {
@@ -227,8 +257,10 @@ bool XBot::XBotCoreModel::init(const std::string& urdf_filename,
                                const std::string& joint_map_config)
 {
     // print info about URDF and SRDF files
-    std::cout << "Using urdf_filename : " << urdf_filename << std::endl;
-    std::cout << "Using srdf_filename : " << srdf_filename << std::endl;
+//     std::cout << "Using urdf_filename : " << urdf_filename << std::endl;
+//     std::cout << "Using srdf_filename : " << srdf_filename << std::endl;
+    
+    int fd = suppress_stdout();
     
     // SRDF path
     srdf_path = srdf_filename;
@@ -252,7 +284,10 @@ bool XBot::XBotCoreModel::init(const std::string& urdf_filename,
     }
 
     // load SRDF model from file
+    auto * buf = std::clog.rdbuf();
+    std::clog.rdbuf(nullptr);
     bool ret = this->initFile(*urdf_model, srdf_filename);
+    std::clog.rdbuf(buf);
 
     // save urdf and srdf as strings (can be useful to have!)
     std::ifstream t_urdf(urdf_filename);
@@ -266,11 +301,18 @@ bool XBot::XBotCoreModel::init(const std::string& urdf_filename,
     srdf_string = buffer_srdf.str();
 
     // parse the SRDF file and fill the data structure
-    return (ret && parseSRDF() && joint_limits_ok);
+    bool success = (ret && parseSRDF() && joint_limits_ok);
+    
+    resume_stdout(fd);
+    
+    return success;
 }
 
 bool XBot::XBotCoreModel::init(const std::string& urdf_filename, const std::string& srdf_filename)
 {
+
+    int fd = suppress_stdout();
+    
     // SRDF path
     srdf_path = srdf_filename;
 
@@ -296,7 +338,11 @@ bool XBot::XBotCoreModel::init(const std::string& urdf_filename, const std::stri
     bool ret = this->initFile(*urdf_model, srdf_filename);
 
     // parse the SRDF file and fill the data structure
-    return (ret && parseSRDF() && joint_limits_ok);
+    bool success = (ret && parseSRDF() && joint_limits_ok);
+    
+    resume_stdout(fd);
+    
+    return success;
 }
 
 void XBot::XBotCoreModel::generate_robot(void)
