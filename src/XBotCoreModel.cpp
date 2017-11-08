@@ -241,8 +241,19 @@ void XBot::XBotCoreModel::parseJointMap(void)
 
     // iterate over the node
     for(YAML::const_iterator it=joint_map.begin();it != joint_map.end();++it) {
+        
         int tmp_rid = it->first.as<int>();
         std::string tmp_joint = it->second.as<std::string>();
+        
+        // check that key is unique
+        if(rid2joint.find(tmp_rid) != rid2joint.end()){
+           throw std::runtime_error("Joint ID not unique!");
+        }
+        
+        if(joint2rid.find(tmp_joint) != joint2rid.end()){
+            throw std::runtime_error("Joint name not unique!");
+        }
+        
         // fill the maps
         rid2joint[tmp_rid] = tmp_joint;
         joint2rid[tmp_joint] = tmp_rid;
