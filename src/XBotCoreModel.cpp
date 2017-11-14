@@ -31,7 +31,7 @@ void resume_stdout(int fd) {
   close(fd);
 }
 
-boost::shared_ptr<urdf::ModelInterface> XBot::XBotCoreModel::loadURDF(const std::string& filename)
+std::shared_ptr<urdf::ModelInterface> XBot::XBotCoreModel::loadURDF(const std::string& filename)
 
 {
 
