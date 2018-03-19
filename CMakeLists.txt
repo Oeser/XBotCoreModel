@@ -45,6 +45,11 @@ FIND_PACKAGE(urdfdom REQUIRED)
 FIND_PACKAGE(kdl_parser REQUIRED)
 FIND_PACKAGE(Boost REQUIRED)
 
+# find and use yaml-cpp
+find_package(PkgConfig)
+pkg_check_modules(YAML_CPP yaml-cpp=0.5.1)
+message(STATUS "YAML_CPP Version: ${YAML_CPP_VERSION}")
+
 INCLUDE_DIRECTORIES(include 
                     ${srdfdom_advr_INCLUDE_DIRS} 
                     ${urdfdom_INCLUDE_DIRS} 
@@ -58,7 +63,7 @@ ADD_LIBRARY(XBotCoreModel SHARED ${XBotCoreModel_INCLUDES} src/XBotCoreModel.cpp
 TARGET_LINK_LIBRARIES(XBotCoreModel ${srdfdom_advr_LIBRARIES} 
                                     ${urdfdom_LIBRARIES}
                                     ${Boost_LIBRARIES}
-                                    yaml-cpp
+                                    ${YAML_CPP_LIBRARIES}
                                     ${kdl_parser_LIBRARIES}
                                     )
                                     
